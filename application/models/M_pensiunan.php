@@ -58,4 +58,10 @@ class M_pensiunan extends CI_Model
         $this->db->from('all_pensiunan');
         return $this->db->count_all_results();
     }
+
+    public function edit($id, $data)
+    {
+        $query = $this->db->update('all_pensiunan', $data, array('no' => $id));
+        return $query;
+    }
 }

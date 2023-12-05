@@ -52,6 +52,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 $route['list'] = 'ListPensiun/index';
 $route['list/get_datatables'] = 'ListPensiun/get_datatables';
+$route['list/edit/(:any)'] = 'ListPensiun/edit/$1';
+$route['list/proses_edit'] = 'ListPensiun/proses_edit';
 
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
