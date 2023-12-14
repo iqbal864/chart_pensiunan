@@ -37,7 +37,6 @@ class ListPensiun extends CI_Controller
                     $duplikat_nopen = 0;
                 }
 
-
                 $no++;
                 $row = array();
                 $row[] = $no . ".";
@@ -70,6 +69,13 @@ class ListPensiun extends CI_Controller
         } else {
             $this->load->view('errors/forbidden');
         }
+    }
+
+    public function add()
+    {
+        $this->load->view('templates/header');
+        $this->load->view('add_list');
+        $this->load->view('templates/footer');
     }
 
     public function edit($no)
@@ -108,6 +114,228 @@ class ListPensiun extends CI_Controller
     }
 
 
+    private function validation($nopen, $name)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['valid'] = array();
+        $data['status'] = true;
+
+        $queryCekNopen = $this->db->where('nopen', $nopen)->count_all_results('all_pensiunan');
+
+        if ($nopen == '') {
+            $data['inputerror'][] = "inputNopen";
+            $data['error_string'][] = "Nopen tidak boleh kosong!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($name == '') {
+            $data['inputerror'][] = "inputName";
+            $data['error_string'][] = "Nama tidak boleh kosong!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputTgl_lahir') == '') {
+            $data['inputerror'][] = "inputTgl_lahir";
+            $data['error_string'][] = "Tanggal lahir tidak boleh kosong!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputTgl_pensiun') == '') {
+            $data['inputerror'][] = "inputTgl_pensiun";
+            $data['error_string'][] = "Tanggal pensiun tidak boleh kosong!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputStatus') == "") {
+            $data['inputerror'][] = "inputStatus";
+            $data['error_string'][] = "Status belum dipilih!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputKeterangan') == "") {
+            $data['inputerror'][] = "inputKeterangan";
+            $data['error_string'][] = "Keterangan belum dipilih!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputGender') == "") {
+            $data['inputerror'][] = "inputGender";
+            $data['error_string'][] = "Gender belum dipilih!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputRekening') == "") {
+            $data['inputerror'][] = "inputRekening";
+            $data['error_string'][] = "Nomor rekening tidak boleh kosong!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputBank') == "") {
+            $data['inputerror'][] = "inputBank";
+            $data['error_string'][] = "Bank tidak boleh kosong!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputPembayaran') == "") {
+            $data['inputerror'][] = "inputPembayaran";
+            $data['error_string'][] = "Tipe pembayaran belum dipilih!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputNoBpjs') == "") {
+            $data['inputerror'][] = "inputNoBpjs";
+            $data['error_string'][] = "Nomor bpjs tidak boleh kosong!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputKelasBpjs') == "") {
+            $data['inputerror'][] = "inputKelasBpjs";
+            $data['error_string'][] = "kelas bpjs belum dipilih!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+
+        if ($nopen != '') {
+            if ($queryCekNopen == 2) {
+                $data['inputerror'][] = "inputNopen";
+                $data['error_string'][] = "Nopen sudah pernah ditambahkan!";
+                $data['valid'][] = false;
+                $data['status'] = false;
+            } else {
+                $data['inputerror'][] = "inputNopen";
+                $data['error_string'][] = "";
+                $data['valid'][] = true;
+            }
+        }
+
+        if ($name != '') {
+            $data['inputerror'][] = "inputName";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputTgl_lahir') != '') {
+            $data['inputerror'][] = "inputTgl_lahir";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputTgl_pensiun') != '') {
+            $data['inputerror'][] = "inputTgl_pensiun";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputStatus') != "") {
+            $data['inputerror'][] = "inputStatus";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputKeterangan') != "") {
+            $data['inputerror'][] = "inputKeterangan";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputGender') != "") {
+            $data['inputerror'][] = "inputGender";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputRekening') != "") {
+            $data['inputerror'][] = "inputRekening";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputBank') != "") {
+            $data['inputerror'][] = "inputBank";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputPembayaran') != "") {
+            $data['inputerror'][] = "inputPembayaran";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputNoBpjs') != "") {
+            $data['inputerror'][] = "inputNoBpjs";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputKelasBpjs') != "") {
+            $data['inputerror'][] = "inputKelasBpjs";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($data['status'] == false) {
+            echo json_encode($data);
+            exit();
+        }
+    }
+
+    public function proses_add()
+    {
+        if ($this->input->is_ajax_request()) {
+            $nopen = $this->input->post('inputNopen');
+            $nik = $this->input->post('inputNik');
+            $name = $this->input->post('inputName');
+            $tgl_lahir = ($this->input->post('inputTgl_lahir') != '') ? date('Y-m-d', strtotime($this->input->post('inputTgl_lahir'))) : '';
+            $tgl_pensiun = ($this->input->post('inputTgl_pensiun') != '') ? date('Y-m-d', strtotime($this->input->post('inputTgl_pensiun'))) : '';
+            $status = $this->input->post('inputStatus');
+            $hidup_md_bk = $this->input->post('inputKeterangan');
+
+            if ($hidup_md_bk == "MD") {
+                $tgl_meninggal = date('Y-m-d', strtotime($this->input->post('inputTgl_meninggal')));
+            } else {
+                $tgl_meninggal = "";
+            }
+
+            $no_npp = $this->input->post('inputNonpp');
+            $contact_person = $this->input->post('inputContact');
+            $no_rek = $this->input->post('inputRekening');
+            $bank = $this->input->post('inputBank');
+            $gender = $this->input->post('inputGender');
+            $bulanan_sekaligus = $this->input->post('inputPembayaran');
+            $no_bpjs = $this->input->post('inputNoBpjs');
+            $kelas_bpjs = $this->input->post('inputKelasBpjs');
+            $address = $this->input->post('inputAddress');
+            $nama_pasangan = $this->input->post('inputPasangan');
+
+            $this->validation($nopen, $name);
+
+            $this->M_pensiunan->add($nopen, $nik, $name, $tgl_lahir, $tgl_pensiun, $status, $hidup_md_bk, $no_npp, $tgl_meninggal, $contact_person, $no_rek, $bank, $gender, $bulanan_sekaligus, $no_bpjs, $kelas_bpjs, $address, $nama_pasangan);
+
+            $this->session->set_flashdata('berhasil', 'Berhasil Add Pensiunan');
+
+            $msg = array('berhasil' => "list");
+            echo json_encode($msg);
+        } else {
+            $this->load->view('errors/forbidden');
+        }
+    }
+
+
     private function validation_edit($no, $nopen, $name)
     {
         $data = array();
@@ -132,7 +360,80 @@ class ListPensiun extends CI_Controller
             $data['status'] = false;
         }
 
-        if ($this->input->post('inputNopen') != '') {
+        if ($this->input->post('inputTgl_lahir') == '') {
+            $data['inputerror'][] = "inputTgl_lahir";
+            $data['error_string'][] = "Tanggal lahir tidak boleh kosong!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputTgl_pensiun') == '') {
+            $data['inputerror'][] = "inputTgl_pensiun";
+            $data['error_string'][] = "Tanggal pensiun tidak boleh kosong!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputStatus') == "") {
+            $data['inputerror'][] = "inputStatus";
+            $data['error_string'][] = "Status belum dipilih!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputKeterangan') == "") {
+            $data['inputerror'][] = "inputKeterangan";
+            $data['error_string'][] = "Keterangan belum dipilih!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputGender') == "") {
+            $data['inputerror'][] = "inputGender";
+            $data['error_string'][] = "Gender belum dipilih!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputRekening') == "") {
+            $data['inputerror'][] = "inputRekening";
+            $data['error_string'][] = "Nomor rekening tidak boleh kosong!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputBank') == "") {
+            $data['inputerror'][] = "inputBank";
+            $data['error_string'][] = "Bank tidak boleh kosong!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputPembayaran') == "") {
+            $data['inputerror'][] = "inputPembayaran";
+            $data['error_string'][] = "Tipe pembayaran belum dipilih!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputNoBpjs') == "") {
+            $data['inputerror'][] = "inputNoBpjs";
+            $data['error_string'][] = "Nomor bpjs tidak boleh kosong!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+        if ($this->input->post('inputKelasBpjs') == "") {
+            $data['inputerror'][] = "inputKelasBpjs";
+            $data['error_string'][] = "kelas bpjs belum dipilih!";
+            $data['valid'][] = false;
+            $data['status'] = false;
+        }
+
+
+
+
+        if ($nopen != '') {
             if ($queryCekNopen == 2) {
                 $data['inputerror'][] = "inputNopen";
                 $data['error_string'][] = "Nopen sudah pernah ditambahkan!";
@@ -145,8 +446,68 @@ class ListPensiun extends CI_Controller
             }
         }
 
-        if ($this->input->post('inputName') != '') {
+        if ($name != '') {
             $data['inputerror'][] = "inputName";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputTgl_lahir') != '') {
+            $data['inputerror'][] = "inputTgl_lahir";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputTgl_pensiun') != '') {
+            $data['inputerror'][] = "inputTgl_pensiun";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputStatus') != "") {
+            $data['inputerror'][] = "inputStatus";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputKeterangan') != "") {
+            $data['inputerror'][] = "inputKeterangan";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputGender') != "") {
+            $data['inputerror'][] = "inputGender";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputRekening') != "") {
+            $data['inputerror'][] = "inputRekening";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputBank') != "") {
+            $data['inputerror'][] = "inputBank";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputPembayaran') != "") {
+            $data['inputerror'][] = "inputPembayaran";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputNoBpjs') != "") {
+            $data['inputerror'][] = "inputNoBpjs";
+            $data['error_string'][] = "";
+            $data['valid'][] = true;
+        }
+
+        if ($this->input->post('inputKelasBpjs') != "") {
+            $data['inputerror'][] = "inputKelasBpjs";
             $data['error_string'][] = "";
             $data['valid'][] = true;
         }

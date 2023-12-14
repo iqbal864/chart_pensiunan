@@ -54,6 +54,8 @@ $route['list'] = 'ListPensiun/index';
 $route['list/get_datatables'] = 'ListPensiun/get_datatables';
 $route['list/edit/(:any)'] = 'ListPensiun/edit/$1';
 $route['list/proses_edit'] = 'ListPensiun/proses_edit';
+$route['list/add'] = 'ListPensiun/add';
+$route['list/proses_add'] = 'ListPensiun/proses_add';
 
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';

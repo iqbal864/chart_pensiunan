@@ -2,6 +2,13 @@
 
 class M_pensiunan extends CI_Model
 {
+
+    public function add($nopen, $nik, $name, $tgl_lahir, $tgl_pensiun, $status, $hidup_md_bk, $no_npp, $tgl_meninggal, $contact_person, $no_rek, $bank, $gender, $bulanan_sekaligus, $no_bpjs, $kelas_bpjs, $address, $nama_pasangan)
+    {
+        $query = "INSERT INTO all_pensiunan (nopen, nik, name, tgl_lahir, tgl_pensiun, status, hidup_md_bk, no_npp, tgl_meninggal, contact_person, no_rek, bank, gender, bulanan_sekaligus, no_bpjs, kelas_bpjs, address, nama_pasangan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $this->db->query($query, array($nopen, $nik, $name, $tgl_lahir, $tgl_pensiun, $status, $hidup_md_bk, $no_npp, $tgl_meninggal, $contact_person, $no_rek, $bank, $gender, $bulanan_sekaligus, $no_bpjs, $kelas_bpjs, $address, $nama_pasangan));
+    }
+
     // start datatables
     var $column_order = array(null, 'name'); //set column field database for datatable orderable
     var $column_search = array('name', 'nopen'); //set column field database for datatable searchable
