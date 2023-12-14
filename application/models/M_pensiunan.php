@@ -7,10 +7,13 @@ class M_pensiunan extends CI_Model
     var $column_search = array('name', 'nopen'); //set column field database for datatable searchable
     var $order = array('no' => 'asc'); // default order 
 
-    private function _get_datatables_query()
+    private function _get_datatables_query($hidup_md_bk)
     {
         $this->db->select('all_pensiunan.*');
         $this->db->from('all_pensiunan');
+        if ($hidup_md_bk != '') {
+            $this->db->where('hidup_md_bk', $hidup_md_bk);
+        }
 
         $i = 0;
         foreach ($this->column_search as $item) { // loop column 
@@ -37,25 +40,28 @@ class M_pensiunan extends CI_Model
         }
     }
 
-    function get_list()
+    function get_list($hidup_md_bk)
     {
-        $this->_get_datatables_query();
+        $this->_get_datatables_query($hidup_md_bk);
         if (@$_POST['length'] != -1)
             $this->db->limit(@$_POST['length'], @$_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-    function count_filtered()
+    function count_filtered($hidup_md_bk)
     {
-        $this->_get_datatables_query();
+        $this->_get_datatables_query($hidup_md_bk);
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-    function count_all()
+    function count_all($hidup_md_bk)
     {
         $this->db->from('all_pensiunan');
+        if ($hidup_md_bk != '') {
+            $this->db->where('hidup_md_bk', $hidup_md_bk);
+        }
         return $this->db->count_all_results();
     }
 

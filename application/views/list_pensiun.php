@@ -11,6 +11,7 @@
                 </div>
             </div>
             <div class="card-body">
+                <p hidden id="hidup_md_bk"></p>
                 <!-- Modal -->
                 <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -62,6 +63,24 @@
                                 <th>Gender</th>
                                 <th class="text-center" style="width: 10%">Action</th>
                             </tr>
+                            <tr>
+                                <th style="padding: 0 !important; height:30px !important;"></th>
+                                <th style="padding: 0 !important; height:30px !important;"></th>
+                                <th style="padding: 0 !important; height:30px !important;"></th>
+                                <th style="padding: 0 !important; height:30px !important;"></th>
+                                <th style="padding: 0 !important; height:30px !important;"></th>
+                                <th style="padding: 0 !important; height:30px !important;"></th>
+                                <th style="padding: 0 !important; height:30px !important;">
+                                    <select class="form-control form-control-sm" id="filter_status_hidup">
+                                        <option value=""></option>
+                                        <?php foreach ($status_hidup as $sh) : ?>
+                                            <option value="<?= $sh['hidup_md_bk'] ?>"><?= $sh['hidup_md_bk'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </th>
+                                <th style="padding: 0 !important; height:30px !important;"></th>
+                                <th style="padding: 0 !important; height:30px !important;"></th>
+                            </tr>
                         </thead>
                         <tbody>
 
@@ -74,13 +93,24 @@
 </div>
 
 <script>
+    $('#filter_status_hidup').on('change', function() {
+        $('#hidup_md_bk').text($(this).val());
+        table.ajax.reload();
+    });
+
     var table = $('#tabel_list').DataTable({
         "processing": true,
         "serverSide": true,
         "order": [],
+        pageLength: 50,
+        lengthMenu: [10, 25, 50, 100, 500, 1000],
+        stateSave: true,
         "ajax": {
             "url": "<?= base_url() ?>list/get_datatables",
-            "type": "POST"
+            "type": "POST",
+            "data": function(d) {
+                d.hidup_md_bk = $("#hidup_md_bk").text();
+            }
         },
         "fnDrawCallback": function() {
             $('[data-toggle="tooltip"]').tooltip();
@@ -89,6 +119,11 @@
             "targets": [0, 8],
             "orderable": false
         }],
+        'createdRow': function(row, data, dataIndex) {
+            if (data['duplikat_nopen'] > 2) {
+                $(row).addClass('table-danger');
+            }
+        },
         "orderCellsTop": true,
     });
 

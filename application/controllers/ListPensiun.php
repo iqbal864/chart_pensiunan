@@ -12,20 +12,32 @@ class ListPensiun extends CI_Controller
 
     public function index()
     {
+        $data['status_hidup'] = $this->db->group_by('hidup_md_bk')->get('all_pensiunan')->result_array();
         $this->load->view('templates/header');
-        $this->load->view('list_pensiun');
+        $this->load->view('list_pensiun', $data);
         $this->load->view('templates/footer');
     }
 
     public function get_datatables()
     {
         if ($this->input->is_ajax_request()) {
-            $list = $this->M_pensiunan->get_list();
-            $count_filter = $this->M_pensiunan->count_filtered();
+            $hidup_md_bk = $this->input->post('hidup_md_bk');
+            $list = $this->M_pensiunan->get_list($hidup_md_bk);
+            $count_filter = $this->M_pensiunan->count_filtered($hidup_md_bk);
 
             $data = array();
             $no = @$_POST['start'];
             foreach ($list as $item) {
+
+                $queryGetDuplikatNopen = $this->db->select('nopen, count(*) as total')->where('nopen', $item->nopen)->group_by('nopen')->having('total > 2')->get('all_pensiunan')->row_array();
+
+                if (!empty($queryGetDuplikatNopen)) {
+                    $duplikat_nopen = $queryGetDuplikatNopen['total'];
+                } else {
+                    $duplikat_nopen = 0;
+                }
+
+
                 $no++;
                 $row = array();
                 $row[] = $no . ".";
@@ -44,11 +56,12 @@ class ListPensiun extends CI_Controller
 								<i class="fa fa-edit"></i>
 							</a>
 						</div>';
+                $row['duplikat_nopen'] = $duplikat_nopen;
                 $data[] = $row;
             }
             $output = array(
                 "draw" => @$_POST['draw'],
-                "recordsTotal" => $this->M_pensiunan->count_all(),
+                "recordsTotal" => $this->M_pensiunan->count_all($hidup_md_bk),
                 "recordsFiltered" => $count_filter,
                 "data" => $data,
             );
